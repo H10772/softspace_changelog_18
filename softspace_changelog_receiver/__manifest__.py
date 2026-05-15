@@ -24,6 +24,7 @@
     'depends': ['website'],
     'data': [
         'security/ir.model.access.csv',
+        'views/assets.xml',
         'views/softspace_changelog_views.xml',
         'views/changelog_api_log_views.xml',
         'views/res_config_settings_views.xml',

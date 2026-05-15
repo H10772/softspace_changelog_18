@@ -65,7 +65,11 @@ class ApiChangelogController(http.Controller):
                 methods=['GET'], csrf=False)
     def health(self, **kw):
         return request.make_response(
-            json.dumps({'status': 'ok'}),
+            json.dumps({
+                'status': 'ok',
+                'module': 'softspace_changelog_receiver',
+                'version': '18.0.1.0.0',
+            }),
             headers=[('Content-Type', 'application/json')],
         )
 
@@ -125,7 +129,9 @@ class ApiChangelogController(http.Controller):
         if not ts:
             return True
         try:
-            req_time = datetime.fromisoformat(ts).replace(tzinfo=timezone.utc)
+            req_time = datetime.fromisoformat(ts)
+            if req_time.tzinfo is None:
+                req_time = req_time.replace(tzinfo=timezone.utc)
             age = abs((datetime.now(timezone.utc) - req_time).total_seconds())
             return age <= max_age
         except (ValueError, TypeError):
