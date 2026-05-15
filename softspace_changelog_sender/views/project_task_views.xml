@@ -30,7 +30,8 @@
                         <group>
                             <field name="changelog_version" required="enable_changelog_push"/>
                             <field name="changelog_release_date"/>
-                            <field name="changelog_change_type" widget="radio" options="{'horizontal': true}"/>                            <field name="changelog_publish_status" readonly="1" widget="badge"
+                            <field name="changelog_change_type" widget="radio" options="{'horizontal': true}"/>
+                            <field name="changelog_publish_status" readonly="1" widget="badge"
                                    decoration-info="changelog_publish_status == 'draft'"
                                    decoration-success="changelog_publish_status == 'success'"
                                    decoration-danger="changelog_publish_status == 'failed'"/>
