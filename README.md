@@ -2,6 +2,10 @@
 
 Odoo modules for publishing changelog entries from Softspace to client Odoo instances.
 
+## Architecture
+
+![System Architecture](architecture.png)
+
 ## Modules
 
 ### softspace_changelog_sender
