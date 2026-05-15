@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_softspace_changelog_user,softspace.changelog.user,model_softspace_changelog,base.group_user,1,1,1,1
+access_softspace_changelog_public,softspace.changelog.public,model_softspace_changelog,base.group_public,1,0,0,0
+access_softspace_changelog_api_log_admin,softspace.changelog.api.log.admin,model_softspace_changelog_api_log,base.group_system,1,1,1,1

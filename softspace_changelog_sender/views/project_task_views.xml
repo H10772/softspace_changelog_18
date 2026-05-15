@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_task_form_inherit_sender" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.sender</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//header" position="inside">
+                <field name="enable_changelog_push" invisible="1"/>
+                <button name="action_publish_changelog" type="object"
+                        string="Publish Changelog" class="oe_highlight"
+                        invisible="not enable_changelog_push"/>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_client_changelog" type="object"
+                        class="oe_stat_button" icon="fa-globe"
+                        invisible="not enable_changelog_push">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Client</span>
+                        <span class="o_stat_text">Changelog</span>
+                    </div>
+                </button>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Changelog" name="changelog" invisible="not enable_changelog_push">
+                    <group>
+                        <group>
+                            <field name="changelog_version" required="enable_changelog_push"/>
+                            <field name="changelog_release_date"/>
+                            <field name="changelog_change_type" widget="radio" options="{'horizontal': true}"/>                            <field name="changelog_publish_status" readonly="1" widget="badge"
+                                   decoration-info="changelog_publish_status == 'draft'"
+                                   decoration-success="changelog_publish_status == 'success'"
+                                   decoration-danger="changelog_publish_status == 'failed'"/>
+                        </group>
+                        <group>
+                            <field name="destination_changelog_id" readonly="1"/>
+                            <field name="changelog_last_push_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="API Details" groups="base.group_system">
+                        <field name="changelog_push_response" readonly="1"/>
+                        <field name="changelog_last_payload" readonly="1"/>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

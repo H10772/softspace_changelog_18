@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_softspace_changelog_form" model="ir.ui.view">
+        <field name="name">softspace.changelog.form</field>
+        <field name="model">softspace.changelog</field>
+        <field name="arch" type="xml">
+            <form string="Changelog Entry">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Title"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="version"/>
+                            <field name="release_date"/>
+                            <field name="change_type"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="source_project"/>
+                            <field name="received_date" readonly="1"/>
+                            <field name="last_update_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" widget="html"/>
+                        </page>
+                        <page string="Technical" groups="base.group_no_one">
+                            <group>
+                                <field name="external_id"/>
+                                <field name="source_task_id"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_softspace_changelog_tree" model="ir.ui.view">
+        <field name="name">softspace.changelog.tree</field>
+        <field name="model">softspace.changelog</field>
+        <field name="arch" type="xml">
+            <list string="Changelogs" decoration-muted="not active">
+                <field name="name"/>
+                <field name="version"/>
+                <field name="release_date"/>
+                <field name="source_project"/>
+                <field name="received_date"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_softspace_changelog" model="ir.actions.act_window">
+        <field name="name">Changelogs</field>
+        <field name="res_model">softspace.changelog</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_softspace_receiver_root" name="Softspace" sequence="100"/>
+    <menuitem id="menu_softspace_changelog" name="Changelogs"
+              parent="menu_softspace_receiver_root"
+              action="action_softspace_changelog"
+              sequence="10"/>
+
+    <!-- Website menu -->
+    <record id="menu_changelog_website" model="website.menu">
+        <field name="name">Changelog</field>
+        <field name="url">/changelog</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">99</field>
+    </record>
+
+</odoo>

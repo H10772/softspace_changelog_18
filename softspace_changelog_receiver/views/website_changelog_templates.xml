@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="changelog_template" name="Client Changelog">
+        <t t-call="website.layout">
+            <t t-set="additional_title" t-value="company_name + ' Changelog'"/>
+            <style>
+                body, #wrapwrap { background: #fffcf8 !important; }
+
+                .cl-page {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                    background: radial-gradient(circle at top, #fff4e6 0%, #fffcf8 50%);
+                    min-height: 100vh;
+                    color: #374151;
+                }
+
+                /* ---- page header ---- */
+                .cl-page-header {
+                    max-width: 760px;
+                    margin: 0 auto;
+                    padding: 80px 24px 50px;
+                    text-align: center;
+                }
+                .cl-subtitle {
+                    font-size: 1.1rem;
+                    color: #6b7280;
+                    margin-bottom: 24px;
+                    font-weight: 400;
+                }
+                .cl-project-badge {
+                    background: #ffffff;
+                    color: #1d4ed8;
+                    font-size: 0.95rem;
+                    font-weight: 600;
+                    padding: 8px 24px;
+                    border-radius: 99px;
+                    border: 1px solid #e5e7eb;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+                }
+                .cl-project-badge i { color: #3b82f6; }
+
+                /* ---- entries container ---- */
+                .cl-entries {
+                    max-width: 760px;
+                    margin: 0 auto;
+                    padding: 0 24px 80px;
+                }
+
+                /* ---- version card ---- */
+                .cl-card {
+                    background: #ffffff;
+                    border: 1px solid #f3f4f6;
+                    border-radius: 16px;
+                    margin-bottom: 24px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 24px rgba(0,0,0,.04);
+                }
+
+                /* card header row */
+                .cl-card-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 24px 32px;
+                    border-bottom: 1px solid #e5e7eb;
+                }
+                .cl-version {
+                    font-size: 1.25rem;
+                    font-weight: 700;
+                    color: #000000;
+                }
+                .cl-date {
+                    font-size: 0.95rem;
+                    color: #9ca3af;
+                }
+
+                /* card body */
+                .cl-card-body { padding: 12px 0 24px; }
+
+                /* change type section */
+                .cl-section { padding: 12px 32px; }
+
+                /* type heading */
+                .cl-type-heading {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 0.95rem;
+                    font-weight: 700;
+                    margin-bottom: 12px;
+                    color: #374151;
+                }
+
+                /* bullet items */
+                .cl-items { list-style: none; padding: 0; margin: 0 0 8px; }
+                .cl-items li {
+                    font-size: 0.95rem;
+                    color: #4b5563;
+                    line-height: 1.6;
+                    margin-bottom: 6px;
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 10px;
+                }
+                .cl-items li::before {
+                    content: "•";
+                    color: #9ca3af;
+                    font-size: 1.2rem;
+                    line-height: 1.2;
+                }
+
+                /* description html */
+                .cl-desc {
+                    padding-left: 18px;
+                    font-size: 0.9rem;
+                    color: #6b7280;
+                    line-height: 1.6;
+                    margin-bottom: 16px;
+                }
+
+                /* empty state */
+                .cl-empty {
+                    text-align: center;
+                    padding: 80px 20px;
+                    color: #9ca3af;
+                }
+                .cl-empty i { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+
+                /* pager */
+                .cl-pager {
+                    display: flex;
+                    justify-content: center;
+                    gap: 8px;
+                    padding: 40px 0;
+                }
+                .cl-pager a, .cl-pager span {
+                    background: #ffffff;
+                    border: 1px solid #e5e7eb;
+                    color: #4b5563;
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    font-size: 0.9rem;
+                    font-weight: 500;
+                    text-decoration: none;
+                    transition: all .2s;
+                }
+                .cl-pager a:hover { background: #f9fafb; border-color: #d1d5db; }
+                .cl-pager span.current {
+                    background: #fef9c3;
+                    border-color: #fde68a;
+                    color: #854d0e;
+                }
+
+                @media (max-width: 640px) {
+                    .cl-card-header { flex-direction: column; align-items: flex-start; gap: 8px; padding: 20px; }
+                    .cl-section { padding: 12px 20px; }
+                }
+            </style>
+
+            <div id="wrap" class="cl-page">
+
+                <!-- Page Header -->
+                <div class="cl-page-header">
+                    <h2 class="cl-subtitle">Stay updated with the latest improvements</h2>
+                    <span class="cl-project-badge">
+                        <i class="fa fa-bullhorn"/> <t t-out="company_name"/>
+                    </span>
+                </div>
+
+                <!-- Entries -->
+                <div class="cl-entries">
+                    <t t-if="not grouped_changelogs">
+                        <div class="cl-empty">
+                            <i class="fa fa-inbox"/>
+                            <p>No changelog entries have been published yet.</p>
+                        </div>
+                    </t>
+
+                    <t t-foreach="grouped_changelogs" t-as="group">
+                        <div class="cl-card">
+                            <!-- Card Header -->
+                            <div class="cl-card-header">
+                                <span class="cl-version">v<t t-out="group['version']"/></span>
+                                <span class="cl-date">
+                                    <t t-if="group['entries'][0].release_date">
+                                        <t t-out="group['entries'][0].release_date.strftime('%B %d, %Y')"/>
+                                    </t>
+                                    <t t-else=""><t t-out="group['release_date']"/></t>
+                                </span>
+                            </div>
+
+                            <!-- Card Body — one section per entry -->
+                            <div class="cl-card-body">
+                                <t t-foreach="group['entries']" t-as="entry">
+                                    <div class="cl-section">
+                                        <!-- Type Heading -->
+                                        <t t-if="entry.change_type == 'added'">
+                                            <div class="cl-type-heading">&#10024; New</div>
+                                        </t>
+                                        <t t-elif="entry.change_type == 'fixed'">
+                                            <div class="cl-type-heading">&#128027; Fixed</div>
+                                        </t>
+                                        <t t-elif="entry.change_type == 'changed'">
+                                            <div class="cl-type-heading">&#11014; Improved</div>
+                                        </t>
+                                        <t t-elif="entry.change_type == 'deleted'">
+                                            <div class="cl-type-heading">&#128465; Removed</div>
+                                        </t>
+                                        <t t-elif="entry.change_type == 'obsolete'">
+                                            <div class="cl-type-heading">&#128230; Obsolete</div>
+                                        </t>
+
+                                        <!-- Title as bullet -->
+                                        <ul class="cl-items">
+                                            <li><t t-out="entry.name"/></li>
+                                        </ul>
+
+                                        <!-- Description -->
+                                        <div class="cl-desc"
+                                             t-if="entry.description and entry.description != '&lt;p&gt;&lt;br&gt;&lt;/p&gt;'">
+                                            <t t-out="entry.description"/>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+
+                    <!-- Pagination -->
+                    <div class="cl-pager" t-if="pager and pager.get('page_count', 0) > 1">
+                        <t t-if="page > 1">
+                            <a t-attf-href="/changelog?page=#{page-1}&amp;search=#{search}&amp;sort=#{sort}">
+                                <i class="fa fa-chevron-left"/> Prev
+                            </a>
+                        </t>
+                        <t t-foreach="range(1, pager['page_count'] + 1)" t-as="p_num">
+                            <t t-if="p_num == page">
+                                <span class="current"><t t-out="p_num"/></span>
+                            </t>
+                            <t t-elif="p_num == 1 or p_num == pager['page_count'] or (p_num >= page - 1 and p_num &lt;= page + 1)">
+                                <a t-attf-href="/changelog?page=#{p_num}&amp;search=#{search}&amp;sort=#{sort}">
+                                    <t t-out="p_num"/>
+                                </a>
+                            </t>
+                        </t>
+                        <t t-if="page &lt; pager['page_count']">
+                            <a t-attf-href="/changelog?page=#{page+1}&amp;search=#{search}&amp;sort=#{sort}">
+                                Next <i class="fa fa-chevron-right"/>
+                            </a>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
