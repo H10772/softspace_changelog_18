@@ -4,7 +4,9 @@ Odoo modules for publishing changelog entries from Softspace to client Odoo inst
 
 ## Architecture
 
-![System Architecture](architecture.png)
+<p align="center">
+  <img src="architecture.png" alt="System Architecture" width="100%"/>
+</p>
 
 ## Modules
 
