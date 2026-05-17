@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <template id="changelog_assets" inherit_id="website.assets_frontend" name="Changelog CSS">
-        <xpath expr="." position="inside">
-            <link rel="stylesheet" href="/softspace_changelog_receiver/static/src/css/changelog.css"/>
-        </xpath>
-    </template>
-</odoo>
