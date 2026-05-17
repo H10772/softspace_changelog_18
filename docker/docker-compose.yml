@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # ============================================
+  # SENDER (Softspace Main Odoo) - Port 8120
+  # ============================================
+  sender-db:
+    image: postgres:15
+    container_name: changelog_sender_db
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: sender_db
+    volumes:
+      - sender_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  sender-odoo:
+    image: odoo:18.0
+    container_name: changelog_sender_odoo
+    depends_on:
+      - sender-db
+    ports:
+      - "8120:8069"
+    volumes:
+      - ../softspace_changelog_sender:/mnt/extra-addons/softspace_changelog_sender
+      - sender_odoo_data:/var/lib/odoo
+      - ./sender.conf:/etc/odoo/odoo.conf
+    restart: unless-stopped
+
+  # ============================================
+  # RECEIVER (Client Odoo) - Port 8130
+  # ============================================
+  receiver-db:
+    image: postgres:15
+    container_name: changelog_receiver_db
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: receiver_db
+    volumes:
+      - receiver_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  receiver-odoo:
+    image: odoo:18.0
+    container_name: changelog_receiver_odoo
+    depends_on:
+      - receiver-db
+    ports:
+      - "8130:8069"
+    volumes:
+      - ../softspace_changelog_receiver:/mnt/extra-addons/softspace_changelog_receiver
+      - receiver_odoo_data:/var/lib/odoo
+      - ./receiver.conf:/etc/odoo/odoo.conf
+    restart: unless-stopped
+
+volumes:
+  sender_pgdata:
+  sender_odoo_data:
+  receiver_pgdata:
+  receiver_odoo_data:
